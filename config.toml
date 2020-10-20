@@ -1,7 +1,7 @@
 # Site settings
 baseURL = "https://rudakov-portfolio.netlify.app/"
 languageCode = "en-us"
-title = "Rudakov - Portfolio"
+title = "Portfolio website for Aleksandr Rudakov"
 theme = "forty"
 
 # Enter your tracking code to enable Google Analytics
@@ -37,8 +37,8 @@ disqusShortname = ""
 
   # Navigation Section
   [params.navigation]
-    title = "Forty"
-    subtitle = "By HTML5 Up"
+    title = "Portfolio website for Aleksandr Rudakov"
+    # subtitle = "By HTML5 Up"
     menu = "Menu"
     # Optional logo as brand stored in img/
     # logo = "logo.png"
