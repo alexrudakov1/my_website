@@ -104,10 +104,10 @@ disqusShortname = ""
       url = "projects/project2"
 
     [[params.tiles.showcase]]
-      title = "Magna"
-      subtitle = "Lorem Etiam Nullam"
+      title = "Analysis of HIV data, Fertiltiy Rates, Mortality Rates, School Enrollemnt and GDP across regions"
+      #subtitle = "Lorem Etiam Nullam"
       image = "pic03.jpg"
-      url = "blogs/magna"
+      url = "projects/project3"
 
     [[params.tiles.showcase]]
       title = "Ipsum"
