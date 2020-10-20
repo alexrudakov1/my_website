@@ -190,7 +190,7 @@ Alternative hypotheses: true difference in mean weights is not equal to 0
 t.test(weight ~ physical_3plus, data = yrbss)
 ```
 
-
+> p-value is very close to 0. Thus, we reject the Null and confirm that true difference in mean weights is not equal to 0
 
 ## Hypothesis test with `infer`
 
@@ -235,4 +235,4 @@ null_dist %>%
   get_p_value(obs_stat = obs_diff, direction = "two_sided")
 
 ```
-
+> p-value is very close to 0. Thus, we reject the Null and confirm that true difference in mean weights is not equal to 0, so being physically active at least 3 times a week has an effect on weight
