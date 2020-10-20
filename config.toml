@@ -92,8 +92,8 @@ disqusShortname = ""
     # Display your showcases here.
     
     [[params.tiles.showcase]]
-      title = "Project1"
-      subtitle = "Questions"
+      title = "California Contributors plots"
+      subtitle = "What is the plot that shows the top ten cities in highest amounts raised in political contributions in California during the 2016 US Presidential election?"
       image = "pic01.jpg"
       url = "projects/project1"
 

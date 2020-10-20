@@ -1,7 +1,4 @@
 ---
-title: 'Session 2: Homework 1'
-author: "Study Group-B 30"
-date: "`r Sys.Date()`"
 output:
   html_document:
     theme: flatly
@@ -50,24 +47,12 @@ library(ggpubr)
 ```
 
 
-# Challenge 2: 2016 California Contributors plots
+# 2016 California Contributors plots
 
-As discussed in class, I would like you to reproduce the plot that shows the top ten cities in highest amounts raised in political contributions in California during the 2016 US Presidential election.
+To get plot that shows the top ten cities in highest amounts raised in political contributions in California during the 2016 US Presidential election. We must join two dataframes; the one you have with all contributions, and data that can translate zipcodes to cities.
 
-
-
-```{r challenge2, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("images", "challenge2.png"), error = FALSE)
-```
-
-
-To get this plot, you must join two dataframes; the one you have with all contributions, and data that can translate zipcodes to cities.
-You can find a file with all US zipcodes, e.g., here http://www.uszipcodelist.com/download.html. 
-
-The easiest way would be to create two plots and then place one next to each other. For this, you will need the `patchwork` package.
+The easiest way would be to create two plots and then place one next to each other. For this, we will need the `patchwork` package.
 https://cran.r-project.org/web/packages/patchwork/index.html
-
-While this is ok, what if one asked you to create the same plot for the top 10 candidates and not just the top two? The most challenging part is how to reorder within categories, and for this you will find Julia Silge's post on [REORDERING AND FACETTING FOR GGPLOT2](https://juliasilge.com/blog/reorder-within/) useful.
 
 
 ```{r message=FALSE, load_CA_data, warnings=FALSE}

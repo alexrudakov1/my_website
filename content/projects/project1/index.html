@@ -1,7 +1,4 @@
 ---
-title: 'Session 2: Homework 1'
-author: "Study Group-B 30"
-date: "2020-10-20"
 output:
   html_document:
     theme: flatly
@@ -16,15 +13,11 @@ output:
 
 
 
-<div id="challenge-2-2016-california-contributors-plots" class="section level1">
-<h1>Challenge 2: 2016 California Contributors plots</h1>
-<p>As discussed in class, I would like you to reproduce the plot that shows the top ten cities in highest amounts raised in political contributions in California during the 2016 US Presidential election.</p>
-<p><img src="/Users/aleksandrrudakov/Desktop/R/my_website/images/challenge2.png" width="100%" style="display: block; margin: auto;" /></p>
-<p>To get this plot, you must join two dataframes; the one you have with all contributions, and data that can translate zipcodes to cities.
-You can find a file with all US zipcodes, e.g., here <a href="http://www.uszipcodelist.com/download.html" class="uri">http://www.uszipcodelist.com/download.html</a>.</p>
-<p>The easiest way would be to create two plots and then place one next to each other. For this, you will need the <code>patchwork</code> package.
+<div id="california-contributors-plots" class="section level1">
+<h1>2016 California Contributors plots</h1>
+<p>To get plot that shows the top ten cities in highest amounts raised in political contributions in California during the 2016 US Presidential election. We must join two dataframes; the one you have with all contributions, and data that can translate zipcodes to cities.</p>
+<p>The easiest way would be to create two plots and then place one next to each other. For this, we will need the <code>patchwork</code> package.
 <a href="https://cran.r-project.org/web/packages/patchwork/index.html" class="uri">https://cran.r-project.org/web/packages/patchwork/index.html</a></p>
-<p>While this is ok, what if one asked you to create the same plot for the top 10 candidates and not just the top two? The most challenging part is how to reorder within categories, and for this you will find Julia Silge’s post on <a href="https://juliasilge.com/blog/reorder-within/">REORDERING AND FACETTING FOR GGPLOT2</a> useful.</p>
 <pre class="r"><code># Make sure you use vroom() as it is significantly faster than read.csv()
 CA_contributors_2016 &lt;- read_csv(&quot;CA_contributors_2016.csv&quot;) 
 #CA_contributors_2016 &lt;- vroom::vroom(here::here(&quot;data&quot;,&quot;CA_contributors_2016.csv&quot;))
