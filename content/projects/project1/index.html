@@ -1,0 +1,218 @@
+---
+title: 'Session 2: Homework 1'
+author: "Study Group-B 30"
+date: "2020-10-20"
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    code_folding: show
+  pdf_document:
+    toc: yes
+---
+
+
+
+<div id="challenge-2-2016-california-contributors-plots" class="section level1">
+<h1>Challenge 2: 2016 California Contributors plots</h1>
+<p>As discussed in class, I would like you to reproduce the plot that shows the top ten cities in highest amounts raised in political contributions in California during the 2016 US Presidential election.</p>
+<p><img src="/Users/aleksandrrudakov/Desktop/R/my_website/images/challenge2.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>To get this plot, you must join two dataframes; the one you have with all contributions, and data that can translate zipcodes to cities.
+You can find a file with all US zipcodes, e.g., here <a href="http://www.uszipcodelist.com/download.html" class="uri">http://www.uszipcodelist.com/download.html</a>.</p>
+<p>The easiest way would be to create two plots and then place one next to each other. For this, you will need the <code>patchwork</code> package.
+<a href="https://cran.r-project.org/web/packages/patchwork/index.html" class="uri">https://cran.r-project.org/web/packages/patchwork/index.html</a></p>
+<p>While this is ok, what if one asked you to create the same plot for the top 10 candidates and not just the top two? The most challenging part is how to reorder within categories, and for this you will find Julia Silge’s post on <a href="https://juliasilge.com/blog/reorder-within/">REORDERING AND FACETTING FOR GGPLOT2</a> useful.</p>
+<pre class="r"><code># Make sure you use vroom() as it is significantly faster than read.csv()
+CA_contributors_2016 &lt;- read_csv(&quot;CA_contributors_2016.csv&quot;) 
+#CA_contributors_2016 &lt;- vroom::vroom(here::here(&quot;data&quot;,&quot;CA_contributors_2016.csv&quot;))
+glimpse(CA_contributors_2016)</code></pre>
+<pre><code>## Rows: 1,292,843
+## Columns: 4
+## $ cand_nm           &lt;chr&gt; &quot;Clinton, Hillary Rodham&quot;, &quot;Clinton, Hillary Rodham…
+## $ contb_receipt_amt &lt;dbl&gt; 50.0, 200.0, 5.0, 48.3, 40.0, 244.3, 35.0, 100.0, 2…
+## $ zip               &lt;dbl&gt; 94939, 93428, 92337, 95334, 93011, 95826, 90278, 90…
+## $ contb_date        &lt;date&gt; 2016-04-26, 2016-04-20, 2016-04-02, 2016-11-21, 20…</code></pre>
+<pre class="r"><code>zip_code &lt;- read_csv(&quot;zip_code_database.csv&quot;)
+#zip_code &lt;- vroom::vroom(here::here(&quot;data&quot;,&quot;zip_code_database.csv&quot;))
+glimpse(zip_code)</code></pre>
+<pre><code>## Rows: 42,522
+## Columns: 16
+## $ zip                  &lt;chr&gt; &quot;00501&quot;, &quot;00544&quot;, &quot;00601&quot;, &quot;00602&quot;, &quot;00603&quot;, &quot;00…
+## $ type                 &lt;chr&gt; &quot;UNIQUE&quot;, &quot;UNIQUE&quot;, &quot;STANDARD&quot;, &quot;STANDARD&quot;, &quot;STA…
+## $ primary_city         &lt;chr&gt; &quot;Holtsville&quot;, &quot;Holtsville&quot;, &quot;Adjuntas&quot;, &quot;Aguada&quot;…
+## $ acceptable_cities    &lt;chr&gt; NA, NA, NA, NA, &quot;Ramey&quot;, &quot;Ramey&quot;, NA, NA, NA, NA…
+## $ unacceptable_cities  &lt;chr&gt; &quot;I R S Service Center&quot;, &quot;Irs Service Center&quot;, &quot;C…
+## $ state                &lt;chr&gt; &quot;NY&quot;, &quot;NY&quot;, &quot;PR&quot;, &quot;PR&quot;, &quot;PR&quot;, &quot;PR&quot;, &quot;PR&quot;, &quot;PR&quot;, …
+## $ county               &lt;chr&gt; &quot;Suffolk County&quot;, &quot;Suffolk County&quot;, &quot;Adjuntas&quot;, …
+## $ timezone             &lt;chr&gt; &quot;America/New_York&quot;, &quot;America/New_York&quot;, &quot;America…
+## $ area_codes           &lt;dbl&gt; 631, 631, 787939, 787, 787, NA, NA, 787939, 787,…
+## $ latitude             &lt;dbl&gt; 40.8, 40.8, 18.2, 18.4, 18.4, 18.4, 18.4, 18.2, …
+## $ longitude            &lt;dbl&gt; -73.0, -73.0, -66.7, -67.2, -67.2, -67.2, -67.2,…
+## $ world_region         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ country              &lt;chr&gt; &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, …
+## $ decommissioned       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ estimated_population &lt;dbl&gt; 384, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+## $ notes                &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, &quot;no NWS data…</code></pre>
+<pre class="r"><code>#when we join the data together, we need to convert them into the same string type#
+
+CA_contributors_2016$zip &lt;- as.character(CA_contributors_2016$zip)
+
+
+total &lt;- merge(CA_contributors_2016,zip_code, by = &#39;zip&#39;)
+glimpse(total)</code></pre>
+<pre><code>## Rows: 1,292,843
+## Columns: 19
+## $ zip                  &lt;chr&gt; &quot;90001&quot;, &quot;90001&quot;, &quot;90001&quot;, &quot;90001&quot;, &quot;90001&quot;, &quot;90…
+## $ cand_nm              &lt;chr&gt; &quot;Trump, Donald J.&quot;, &quot;Clinton, Hillary Rodham&quot;, &quot;…
+## $ contb_receipt_amt    &lt;dbl&gt; 4.00, 38.00, 50.00, 150.00, 10.00, -4.92, 25.00,…
+## $ contb_date           &lt;date&gt; 2016-07-12, 2016-08-31, 2016-11-03, 2016-10-04,…
+## $ type                 &lt;chr&gt; &quot;STANDARD&quot;, &quot;STANDARD&quot;, &quot;STANDARD&quot;, &quot;STANDARD&quot;, …
+## $ primary_city         &lt;chr&gt; &quot;Los Angeles&quot;, &quot;Los Angeles&quot;, &quot;Los Angeles&quot;, &quot;Lo…
+## $ acceptable_cities    &lt;chr&gt; &quot;Firestone Park, Firestone Pk&quot;, &quot;Firestone Park,…
+## $ unacceptable_cities  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ state                &lt;chr&gt; &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, …
+## $ county               &lt;chr&gt; &quot;Los Angeles County&quot;, &quot;Los Angeles County&quot;, &quot;Los…
+## $ timezone             &lt;chr&gt; &quot;America/Los_Angeles&quot;, &quot;America/Los_Angeles&quot;, &quot;A…
+## $ area_codes           &lt;dbl&gt; 2.13e+11, 2.13e+11, 2.13e+11, 2.13e+11, 2.13e+11…
+## $ latitude             &lt;dbl&gt; 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, …
+## $ longitude            &lt;dbl&gt; -118, -118, -118, -118, -118, -118, -118, -118, …
+## $ world_region         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ country              &lt;chr&gt; &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, &quot;US&quot;, …
+## $ decommissioned       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ estimated_population &lt;dbl&gt; 36200, 36200, 36200, 36200, 36200, 36200, 36200,…
+## $ notes                &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</code></pre>
+<pre class="r"><code>Total_contb &lt;-total %&gt;% 
+  group_by(cand_nm) %&gt;% 
+  summarise(total_amt = sum(contb_receipt_amt)) %&gt;% 
+  arrange(desc(total_amt))</code></pre>
+<pre class="r"><code>Clinton_plot &lt;- ggplot(filter(total,cand_nm==&quot;Clinton, Hillary Rodham&quot; &amp; state == &quot;CA&quot;) %&gt;%  
+               group_by(primary_city) %&gt;% 
+               summarise(total_amt_county = sum(contb_receipt_amt)) %&gt;%
+               arrange(desc(total_amt_county)) %&gt;%
+               slice_max(total_amt_county,n=10) %&gt;%
+              mutate(name = &quot;Clinton, Hillary Rodham&quot;),aes(
+                 x=total_amt_county,
+                 y=reorder(primary_city,total_amt_county))) +
+  geom_col(fill=&quot;blue&quot;) + 
+  theme_bw() + 
+  ylab(&quot; &quot;) + 
+  xlab(&quot;Amount raised&quot;) + 
+  ggtitle(&quot;Where did candidates raise most money&quot;) +
+  scale_x_continuous(labels = scales::dollar_format()) +
+  facet_wrap(vars(name)) +
+  theme(
+  plot.title = element_text(size = 25),
+  axis.title = element_text(size = 22),
+  axis.text = element_text(size = 15),
+  strip.text = element_text(size=22),
+  panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=2),
+  strip.background = element_rect(color = &quot;black&quot;, size = 2)) +
+  NULL
+
+Clinton_plot</code></pre>
+<p><img src="index_files/figure-html/clinton_contb_per_city-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>Trump_data &lt;- filter(total,cand_nm ==&quot;Trump, Donald J.&quot; &amp; state == &quot;CA&quot;) %&gt;%  
+                       group_by(primary_city) %&gt;% 
+                       summarise(total_amt_county = sum(contb_receipt_amt)) %&gt;%
+                       arrange(desc(total_amt_county)) %&gt;%
+                       slice_max(total_amt_county,n=10) %&gt;%
+                      mutate(name = &quot;Trump, Donald J.&quot;)
+
+glimpse(Trump_data)</code></pre>
+<pre><code>## Rows: 10
+## Columns: 3
+## $ primary_city     &lt;chr&gt; &quot;Los Angeles&quot;, &quot;San Diego&quot;, &quot;Newport Beach&quot;, &quot;Bakers…
+## $ total_amt_county &lt;dbl&gt; 544464, 482885, 347206, 244419, 230712, 190652, 1826…
+## $ name             &lt;chr&gt; &quot;Trump, Donald J.&quot;, &quot;Trump, Donald J.&quot;, &quot;Trump, Dona…</code></pre>
+<pre class="r"><code>Trump_plot &lt;- ggplot(data = Trump_data,aes(
+                         x = total_amt_county,
+                         y = reorder(primary_city,total_amt_county))) +
+  geom_col(fill= &quot;red&quot;) +
+  theme_bw() +
+  ylab(&quot; &quot;) +
+  xlab(&quot;&quot;) +
+  scale_x_continuous(labels = scales::dollar_format()) +
+  facet_wrap(vars(name)) +
+  theme(
+  plot.title = element_text(size = 25),
+  axis.title = element_text(size = 22),
+  axis.text = element_text(size = 15),
+  strip.text = element_text(size=22),
+  panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=2),
+  strip.background = element_rect(color = &quot;black&quot;, size = 2)) +
+  NULL
+
+Trump_plot</code></pre>
+<p><img src="index_files/figure-html/Trump_contb_per_city-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>library(patchwork)
+
+combined_plot &lt;- Clinton_plot + Trump_plot 
+  plot_annotation(title = &quot;Where did the candidates raise most money?&quot;) +
+  theme_bw() + 
+  NULL</code></pre>
+<pre><code>## integer(0)</code></pre>
+<pre class="r"><code>combined_plot</code></pre>
+<p><img src="index_files/figure-html/cobining_plots-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>library(tidytext)
+library(scales)
+
+CA_contributors_top10 &lt;- CA_contributors_2016 %&gt;%
+  group_by(cand_nm) %&gt;%
+  summarise(total_amount = sum(contb_receipt_amt)) %&gt;%
+  arrange(desc(total_amount)) %&gt;%
+  head(10) 
+top10_contributor &lt;- CA_contributors_top10$cand_nm
+
+CA_contributors_top10_cleaned &lt;- CA_contributors_2016 %&gt;%
+  filter(cand_nm %in% top10_contributor) %&gt;%
+  select(cand_nm, contb_receipt_amt, zip)
+
+joined_data_top10 &lt;- left_join(CA_contributors_top10_cleaned,
+                     zip_code,
+                     by = &#39;zip&#39;) 
+
+
+
+top10_data &lt;- joined_data_top10 %&gt;%
+  group_by(cand_nm) %&gt;%
+  count(primary_city, wt = contb_receipt_amt, sort = TRUE)
+
+top10_data %&gt;%
+  group_by(cand_nm) %&gt;%
+  top_n(10) %&gt;%
+  ungroup %&gt;%
+  mutate(cand_nm = factor(cand_nm),
+    primary_city = reorder_within(primary_city, n, cand_nm)) %&gt;%
+  ggplot(aes(x = primary_city, y = n, fill = cand_nm)) +
+  geom_col(show.legend = FALSE) +
+  
+  
+  scale_fill_manual(values = c(&quot;Bush, Jeb&quot;  = &quot;red&quot;,
+                 &quot;Carson, Benjamin S.&quot; =&quot;red&quot;,
+                 &quot;Clinton, Hillary Rodham&quot; = &quot;blue&quot;,
+                 &quot;Cruz, Rafael Edward &#39;Ted&#39;&quot; =&quot;red&quot;,
+                 &quot;Fiorina, Carly&quot; =&quot;red&quot;,
+                 &quot;Kasich, John R.&quot; =&quot;red&quot;,
+                 &quot;Paul, Rand&quot; =&quot;red&quot;,
+                 &quot;Rubio, Marco&quot; =&quot;red&quot;,
+                 &quot;Sanders, Bernard&quot; = &quot;blue&quot;,
+                 &quot;Trump, Donald J.&quot; = &quot;red&quot;)) +
+  facet_wrap(~cand_nm, scales = &#39;free&#39;, ncol = 2) +
+  scale_x_reordered() +
+  scale_y_continuous(labels = label_dollar()) +
+  theme_bw() +
+  labs(y = &#39;Amount raised&#39;,
+       x = &#39;&#39;,
+       title = &#39;Where did candidates raise the most money?&#39;) +
+  coord_flip() +
+  theme(
+  axis.title = element_text(size = 22),
+  axis.text = element_text(size = 15),
+  strip.text = element_text(size=22),
+  panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=2),
+  strip.background = element_rect(color = &quot;black&quot;, size = 2)) </code></pre>
+<p><img src="index_files/figure-html/replicating_the_10_candidate_plot-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>

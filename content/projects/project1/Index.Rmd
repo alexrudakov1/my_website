@@ -72,11 +72,11 @@ While this is ok, what if one asked you to create the same plot for the top 10 c
 
 ```{r message=FALSE, load_CA_data, warnings=FALSE}
 # Make sure you use vroom() as it is significantly faster than read.csv()
-CA_contributors_2016 <- read_csv("data/CA_contributors_2016.csv") 
+CA_contributors_2016 <- read_csv("CA_contributors_2016.csv") 
 #CA_contributors_2016 <- vroom::vroom(here::here("data","CA_contributors_2016.csv"))
 glimpse(CA_contributors_2016)
 
-zip_code <- read_csv("data/zip_code_database.csv")
+zip_code <- read_csv("zip_code_database.csv")
 #zip_code <- vroom::vroom(here::here("data","zip_code_database.csv"))
 glimpse(zip_code)
 ```
