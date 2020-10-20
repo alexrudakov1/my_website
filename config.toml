@@ -98,10 +98,10 @@ disqusShortname = ""
       url = "projects/project1"
 
     [[params.tiles.showcase]]
-      title = "Tempus"
-      subtitle = "Feugiat Amet Tempus"
+      title = "Analysis of physicall activity and weight""
+      subtitle = "Does being physically active at least 3 times affect weight?"
       image = "pic02.jpg"
-      url = "blogs/tempus"
+      url = "projects/project2"
 
     [[params.tiles.showcase]]
       title = "Magna"
