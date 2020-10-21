@@ -44,20 +44,12 @@ disqusShortname = ""
     # logo = "logo.png"
 
     [[params.navigation.links]]
-      name = "Home"
+      name = "About me"
       url = "#"
 
     [[params.navigation.links]]
-      name = "Blogs"
+      name = "Projects I have worked on"
       url = "blogs"
-
-    [[params.navigation.links]]
-      name = "Generic Blog"
-      url = "blogs/ipsum"
-
-    [[params.navigation.links]]
-      name = "Elements"
-      url = "elements.html"
 
     # Add custom links here by uncommenting code below. To remove links just delete
     # the [[params.navigation.links]] map associated with that link. Copy and paste
@@ -111,7 +103,7 @@ disqusShortname = ""
 
     [[params.tiles.showcase]]
       title = "Yield Curve Inversion"
-      #subtitle = "Nisl Sed Aliquam"
+      #Does inversion of the yieled curve predict recession?"
       image = "pic04.jpg"
       url = "projects/project4"
 
@@ -173,7 +165,7 @@ disqusShortname = ""
   # Footer section
   [params.footer]
     enable = true
-    copyright = "Company Name"
+    copyright = "London Business School"
 
     # Uses font awesome icons
     [[params.footer.social]]
