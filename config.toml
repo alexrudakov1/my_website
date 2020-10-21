@@ -103,7 +103,7 @@ disqusShortname = ""
 
     [[params.tiles.showcase]]
       title = "Yield Curve Inversion"
-      #Does inversion of the yieled curve predict recession?"
+      "Does inversion of the yieled curve predict recession?"
       image = "pic04.jpg"
       url = "projects/project4"
 
